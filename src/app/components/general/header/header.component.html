@@ -1,0 +1,40 @@
+<nav [@animateMenu] class="navbar main-navbar on-top" [class.nav-shadow]='this.pageYPosition>0'>
+    <div class="container">
+        <a class="navbar-brand text-light" [routerLink]="'inicio'">
+            <img src='assets/images/logo.png' width='25' />
+        </a>
+        <ul ngbNav #nav="ngbNav" class="menu-ul">
+            <li ngbNavItem >
+                <a ngbNavLink><span class='nav-number'></span> <span class="underline nav-text"> Find Flight </span></a>
+                <ng-template ngbNavContent>Find Flight</ng-template>
+            </li>
+            <li ngbNavItem>
+                <a class="main-btn cv-btn" ngbNavLink>
+                  Sign Up
+                </a>
+            </li>
+            <li ngbNavItem>
+                <a class="main-btn cv-btn" ngbNavLink>
+                  Log In
+                </a>
+            </li>
+        </ul>
+        <div class="menu-wrapper">
+            <div [class.animate]='responsiveMenuVisible' (click)='responsiveMenuVisible = !responsiveMenuVisible' class="hamburger-menu"></div>
+        </div>
+        <div class="menu-responsive" [ngStyle]="{'pointer-events': !responsiveMenuVisible ? 'none' : '' }">
+            <aside [class.aside-show]='responsiveMenuVisible' [class.nav-shadow]='this.pageYPosition>0' class="on-top">
+                <nav>
+                    <ol>
+                        <li >
+                            <a (click)='scroll("about")'>
+                                Find Flight
+                            </a>
+                        </li>
+
+                    </ol>
+                </nav>
+            </aside>
+        </div>
+    </div>
+</nav>
