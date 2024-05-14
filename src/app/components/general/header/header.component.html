@@ -5,16 +5,16 @@
         </a>
         <ul ngbNav #nav="ngbNav" class="menu-ul">
             <li ngbNavItem >
-                <a ngbNavLink><span class='nav-number'></span> <span class="underline nav-text"> Find Flight </span></a>
+                <a ngbNavLink routerLink="/find-flight"><span class='nav-number'></span> <span class="underline nav-text"> Find Flight </span></a>
                 <ng-template ngbNavContent>Find Flight</ng-template>
             </li>
-            <li ngbNavItem>
-                <a class="main-btn cv-btn" ngbNavLink>
+            <!-- <li ngbNavItem>
+                <a class="main-btn cv-btn" class="main-btn cv-btn" ngbNavLink routerLink="/sign-up">
                   Sign Up
                 </a>
-            </li>
+            </li> -->
             <li ngbNavItem>
-                <a class="main-btn cv-btn" ngbNavLink>
+                <a class="main-btn cv-btn" ngbNavLink routerLink="/login">
                   Log In
                 </a>
             </li>

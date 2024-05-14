@@ -12,6 +12,11 @@ import { environment } from '../environments/environment';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LoginComponent } from './components/home/login/login.component';
+import { SignUpComponent } from './components/home/signup/signup.component';
+import { FormsModule } from '@angular/forms';
+import { UserService } from './services/user.service';
+import { FindFlightComponent } from './components/home/find-flight/find-flight.component';
 
 export function HttpLoaderFactory(http: HttpClient){
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -20,6 +25,9 @@ export function HttpLoaderFactory(http: HttpClient){
 @NgModule({
   declarations: [
     AppComponent,
+    LoginComponent, 
+    SignUpComponent,
+    FindFlightComponent
   ],
   imports: [
     BrowserAnimationsModule,
@@ -27,6 +35,7 @@ export function HttpLoaderFactory(http: HttpClient){
     HomeModule,
     GeneralModule,
 
+    FormsModule,
     AnimateOnScrollModule.forRoot(),
     BrowserModule,
     AppRoutingModule,
@@ -40,7 +49,7 @@ export function HttpLoaderFactory(http: HttpClient){
       }
     })
   ],
-  providers: [TranslateService],
+  providers: [TranslateService, UserService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,29 @@
+<section class="section find-flight">
+    <div [@findFlightTrigger] class="container">
+        <div class="section-box-find-flight">
+            <div class="row">
+                <div class="col-md-12 col-sm-12">
+                  <div class="card auth">
+                    <div class="card-body auth-card">
+                      <form (submit)="findFlight(userData)">
+                        <div class="form-group-1">
+                          <!-- <label for="email">Email : </label> -->
+                          <input type="text" name="email" class="form-control" placeholder="From" [(ngModel)]="userData.email">
+                        </div>
+                        <div class="form-group-1">
+                          <!-- <label for="password">Password : </label> -->
+                          <input type="password" name="password" class="form-control" placeholder="Destination" [(ngModel)]="userData.password">
+                        </div>
+                        <div class="text-center">
+                          <input type="submit" class="btn btn-my" value="Find Flights">
+                        </div>
+                      </form>
+                      
+                      
+                    </div>
+                  </div>
+                </div>
+              </div>
+        </div>
+    </div>
+</section>

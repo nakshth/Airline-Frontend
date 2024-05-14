@@ -16,11 +16,11 @@ export class AppComponent implements OnInit{
     ){
     }
   ngOnInit(): void {
-    this.titleService.setTitle( "XYZ Airlines" );
+    this.titleService.setTitle( "Star Airlines" );
 
     this.metaService.addTags([
-      {name: 'keywords', content: 'XYZ Airlines'},
-      {name: 'description', content: 'XYZ Airlines'},
+      {name: 'keywords', content: 'Star Airlines'},
+      {name: 'description', content: 'Star Airlines'},
     ]);
     
     
