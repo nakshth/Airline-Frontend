@@ -1,0 +1,1 @@
+interface Seat { type: string; available: true; user: string; }

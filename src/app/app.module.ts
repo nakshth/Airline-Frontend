@@ -17,6 +17,12 @@ import { SignUpComponent } from './components/home/signup/signup.component';
 import { FormsModule } from '@angular/forms';
 import { UserService } from './services/user.service';
 import { FindFlightComponent } from './components/home/find-flight/find-flight.component';
+import { SeatingPlanComponent } from './components/book-flight/seating-plan/seating-plan.component';
+import { SeatingPlanService } from './services/seating-plan.service';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { BookingComponent } from './components/book-flight/booking/booking.component';
+import { CancellationComponent } from './components/book-flight/cancellation/cancellation.component';
+import { AdminDashboardComponent } from './components/home/admin-dashboard/admin-dashboard.component';
 
 export function HttpLoaderFactory(http: HttpClient){
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -27,11 +33,15 @@ export function HttpLoaderFactory(http: HttpClient){
     AppComponent,
     LoginComponent, 
     SignUpComponent,
-    FindFlightComponent
+    FindFlightComponent,
+    SeatingPlanComponent,
+    BookingComponent,
+    CancellationComponent,
+    AdminDashboardComponent,
   ],
   imports: [
     BrowserAnimationsModule,
-
+    NgbModule,
     HomeModule,
     GeneralModule,
 
@@ -49,7 +59,7 @@ export function HttpLoaderFactory(http: HttpClient){
       }
     })
   ],
-  providers: [TranslateService, UserService],
+  providers: [TranslateService, UserService, SeatingPlanService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

@@ -1,0 +1,71 @@
+@import "./../../../../variables.scss";
+
+.available {
+    color: green;
+}
+
+.occupied {
+    color: red;
+}
+
+.seating-plan {
+    width: 450px;
+}
+
+.seat-layout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 100px;
+    background-image: url('../../../../assets//images//image.png');
+    height: 100vh;
+}
+
+:host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+article {
+    position: relative;
+    width: 20px;
+    height: 20px;
+    margin: 5px;
+    float: left;
+    border: 2px solid black;
+    box-sizing: border-box;
+}
+
+article div {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    line-height: 25px;
+    transition: .5s ease;
+}
+
+article input {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    opacity: 0;
+    cursor: pointer;
+}
+
+input[type=checkbox]~.available {
+    background-color: green;
+}
+
+input[type=checkbox]~.booked {
+    background-color: red;
+}
+
+input[type=checkbox]~.locked {
+    background-color: gray;
+}
