@@ -1,7 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { UserService } from "../../../services/user.service";
-import {trigger, state, style, animate, transition, stagger, query } from "@angular/animations"
+import { trigger, state, style, animate, transition, stagger, query } from "@angular/animations"
 import Keyboard from "simple-keyboard";
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -27,14 +28,25 @@ export class SignUpComponent implements OnInit {
   userData;
   keyboard: Keyboard;
   value = "";
-  constructor(private user: UserService) { }
+  loading = false;
+
+  constructor(private user: UserService, private router: Router) { }
 
   ngOnInit() {
     this.user.currentUserData.subscribe(userData => this.userData = userData)
   }
-  signUp(data){
-    
-    this.user.changeData(data);
+  signUp(data) {
+    this.loading = true;
+    this.user.signup(data).subscribe((resp: any) => {
+      setTimeout(() => {
+        if (resp?.status === 200 && data) {
+          this.router.navigate(['/login']);
+        } else {
+          alert('User not registered. please try again.');
+        }
+        this.loading = false;
+      }, 2500);
+    })
   }
 
   ngAfterViewInit() {
@@ -74,7 +86,7 @@ export class SignUpComponent implements OnInit {
         "{metaright}": "cmd ⌘",
         "{abc}": "ABC"
       }
-      
+
     });
   }
 

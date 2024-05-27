@@ -6,10 +6,10 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class DiscountService {
-  applyDiscount(age: number, basePrice: number): number {
+  applyDiscount(count: number, age: number, basePrice: number): number {
     if (age <= 15) {
-      return basePrice * 0.75; // 25% discount
+      return count * basePrice * 0.75; // 25% discount
     }
-    return basePrice;
+    return count * basePrice;
   }
 }

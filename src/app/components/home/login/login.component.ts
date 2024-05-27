@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { UserService } from "../../../services/user.service";
-import {trigger, state, style, animate, transition, stagger, query } from "@angular/animations"
+import { trigger, state, style, animate, transition, stagger, query } from "@angular/animations"
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -25,10 +26,12 @@ import {trigger, state, style, animate, transition, stagger, query } from "@angu
 export class LoginComponent implements OnInit {
 
   userData;
-  constructor(private user: UserService) {}
+  loading: boolean = false;
+  constructor(private user: UserService, private router: Router) { }
 
   ngOnInit() {
-    this.user.currentUserData.subscribe(userData => (this.userData = userData));
+    this.userData = { email: '', password: '' };
+    // this.user.currentUserData.subscribe(userData => (this.userData = userData));
   }
 
   changeData(event) {
@@ -36,7 +39,29 @@ export class LoginComponent implements OnInit {
     this.user.changeData(msg);
   }
   login(data) {
-    this.user.changeData(data);
+    if (!data.email || !data.password) {
+      alert('please fill required fields');
+      return;
+    }
+    // this.user.changeData(data);
+    this.loading = true;
+    this.user.login(data).subscribe((data: any) => {
+      if (data?.status === 200 && data?.data) {
+        setTimeout(() => {
+          sessionStorage['loggedInUser'] = data.data.id;
+          this.router.navigate(['/find-flight']);
+          this.user.changeData1(data.data);
+          this.loading = false;
+        }, 2500);
+      } else {
+        setTimeout(() => {
+          this.router.navigate(['/sign-up']);
+          delete sessionStorage['Authenticated'];
+          alert('User not authenticated. please register. navigating to registration page...');
+          this.loading = false;
+        }, 1000);
+      }
+    })
   }
 
 

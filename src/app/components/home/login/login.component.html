@@ -1,38 +1,45 @@
 <section class="section login">
-    <div [@loginTrigger] class="container">
-        <div class="section-box-login">
-            <div class="row">
-                <div class="col-md-4 offset-md-4 col-sm-6 offset-sm-3">
-                  <div class="card auth">
-                    <div class="card-body auth-card">
-                      <div class="auth-avatar">
-                        <img src="https://pluspng.com/img-png/user-png-icon-account-avatar-human-male-man-men-people-person-download-svg-download-png-edit-icon-512.png" alt="user" class="user-image">
-                      </div>
-                      <form (submit)="login(userData)">
-                        <div class="form-group">
-                          <label for="email">Email : </label>
-                          <input type="text" name="email" class="form-control" placeholder="Email" [(ngModel)]="userData.email">
-                        </div>
-                        <div class="form-group">
-                          <label for="password">Password : </label>
-                          <input type="password" name="password" class="form-control" placeholder="********" [(ngModel)]="userData.password">
-                          <div class="text-right forget-pass">
-                            <a routerLink="/forget-password">Forget Password ?</a>
-                          </div>
-                        </div>
-                        <div class="text-center">
-                          <input type="submit" class="btn btn-my" value="Login">
-                        </div>
-                      </form>
-                      <div class="text-center sign-up">
-                        Don`t have an account ? <a routerLink="/sign-up">Sign Up</a> hera.
-                      </div>
-                      
-                      
-                    </div>
+  <div [@loginTrigger] class="container">
+    <div class="section-box-login">
+      <div class="row">
+        <div class="col-md-4 offset-md-4 col-sm-6 offset-sm-3">
+          <div class="card auth" style="background: linear-gradient(to right, #240b36, #0a192f);">
+            <div class="card-body auth-card" *ngIf="!loading">
+              <div class="auth-avatar">
+                <img
+                  src="https://pluspng.com/img-png/user-png-icon-account-avatar-human-male-man-men-people-person-download-svg-download-png-edit-icon-512.png"
+                  alt="user" class="user-image">
+              </div>
+              <form (submit)="login(userData)">
+                <div class="form-group">
+                  <label for="email">Email : </label>
+                  <input type="text" name="email" class="form-control" placeholder="Email" [(ngModel)]="userData.email"
+                    required>
+                </div>
+                <div class="form-group">
+                  <label for="password">Password : </label>
+                  <input type="password" name="password" class="form-control" placeholder="********"
+                    [(ngModel)]="userData.password" required>
+                  <div class="text-right forget-pass">
+                    <a routerLink="/forget-password">Forget Password ?</a>
                   </div>
                 </div>
+                <div class="text-center" style="    display: flex;
+                justify-content: center;
+                margin-bottom: 25px;">
+                  <input type="submit" class="main-btn cv-btn nav-link active" value="Login">
+                </div>
+              </form>
+              <div class="text-center sign-up">
+                Don`t have an account ? <a routerLink="/sign-up">Sign Up</a> here.
               </div>
+            </div>
+            <div class="spinner-border m-5" role="status" *ngIf="loading" style="height: 150px; width: 150px;margin-left: 30% !important;">
+              <span class="sr-only">Loading...</span>
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
 </section>

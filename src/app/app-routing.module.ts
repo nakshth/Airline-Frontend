@@ -18,7 +18,7 @@ const routes: Routes = [
   { path: 'find-flight', component: FindFlightComponent },
   { path: 'seating-plan', component: SeatingPlanComponent },
   { path: 'booking', component: BookingComponent },
-  { path: 'cancellation', component: CancellationComponent },
+  { path: 'cancel-booking', component: CancellationComponent },
   { path: 'app-admin-dashboard', component: AdminDashboardComponent },
 
   // {path: 'profile'        ,   component: ProfileComponent         , canActivate: [AuthGuard]},

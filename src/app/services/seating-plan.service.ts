@@ -5,18 +5,20 @@ import { Injectable } from '@angular/core';
 })
 
 export class SeatingPlanService {
-    private seatingPlan: any[][]; // 2D array to represent seat availability
-    private lockedSeats: Set<string>; // Set to store locked seats as "row-seat" strings
-    private bookedSeats: Set<string>; // Set to store booked seats as "row-seat" strings
-    private MAX_BOOKING_LIMIT: number = 6; // Maximum number of seats that can be booked at once
+    public seatingPlan: any[][]; // 2D array to represent seat availability
+    public lockedSeats: Set<string>; // Set to store locked seats as "row-seat" strings
+    public bookedSeats: Set<string>; // Set to store booked seats as "row-seat" strings
+    public MAX_BOOKING_LIMIT: number = 6; // Maximum number of seats that can be booked at once
 
     NUM_ROWS: number = 10;
     NUM_SEATS_PER_ROW: number = 5;
     private BASE_PRICE: number = 100; // Base price for a seat
     private CHILD_DISCOUNT: number = 0.25; // Discount percentage for children
-    private FIRE_EXIT_ROWS: number[] = [10, 16]; // Rows with fire exit seats
+    private FIRE_EXIT_ROWS: number[] = [9]; // Rows with fire exit seats
 
 
+    adults: number = 0;
+    childs: number = 0;
     constructor() {
         this.initializeSeatingPlan();
         this.lockedSeats = new Set<string>();
@@ -25,28 +27,35 @@ export class SeatingPlanService {
 
     private initializeSeatingPlan(): void {
         // Initialize seating plan with all seats as available
-        this.seatingPlan = [
-            [{ type: 'first', seatId: '1A', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{ type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
-            [{}, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, {}],
-        ]
+        let sessionseatingPlan = sessionStorage['seatingPlan']
+        if (sessionseatingPlan) {
+            this.seatingPlan = JSON.parse(sessionseatingPlan);
+        } else {
+            this.seatingPlan = [
+                [{ sort: 0, type: 'first', seatID: '1 A', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 0, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 0, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 0, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 1, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 1, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 1, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 1, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 2, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 2, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 2, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 2, type: 'first', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 3, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 3, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 3, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 3, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 3, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 3, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 4, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 4, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 4, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 4, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 4, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 4, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 5, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 5, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 5, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 5, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 5, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 5, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 6, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 6, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 6, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 6, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 6, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 6, type: 'business', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 7, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 7, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 7, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 7, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 7, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 7, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 8, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 8, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 8, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 8, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 8, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 8, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 9, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 9, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 9, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 9, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 9, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 9, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 11, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 11, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 11, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 11, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 11, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 11, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 12, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 12, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 12, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 12, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 12, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 12, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 13, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 13, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 13, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 13, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 13, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 13, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 14, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 14, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 14, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 14, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 14, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 14, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 15, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 15, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 15, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 15, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 15, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 15, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 16, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 16, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 16, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 16, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 16, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 16, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 17, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 17, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 17, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 17, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 17, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 17, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 18, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 18, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 18, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 18, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 18, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 18, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{ sort: 19, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 19, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 19, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 19, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 19, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 19, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }],
+                [{}, { sort: 20, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 20, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 20, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, { sort: 20, type: 'economy', isLocked: false, isBooked: false, user: { id: '', bookedBy: '' } }, {}],
+            ];
+
+        }
+
         // this.seatingPlan = [];
         // for (let row = 0; row < this.NUM_ROWS; row++) {
         //     this.seatingPlan[row] = [];
@@ -61,7 +70,6 @@ export class SeatingPlanService {
     }
 
     public isSeatAvailable(row: number, seat: number): boolean {
-        debugger
         return this.seatingPlan[row][seat] && !this.isSeatBooked(row, seat) //&& !this.isNearFireExit(row, seat);
     }
 
@@ -80,6 +88,7 @@ export class SeatingPlanService {
 
     // Method to allocate seats based on the algorithm
     public allocateSeats(): void {
+        debugger
         // Example: allocate seats based on predefined criteria
         for (let row = 0; row < this.seatingPlan.length; row++) {
             for (let seat = 0; seat < this.seatingPlan[row].length; seat++) {
@@ -96,6 +105,7 @@ export class SeatingPlanService {
 
 
     public lockSeat(row: number, seat: number): void {
+        debugger
         const seatKey = this.getSeatKey(row, seat);
         this.lockedSeats.add(seatKey);
         setTimeout(() => {
@@ -108,21 +118,38 @@ export class SeatingPlanService {
         this.lockedSeats.delete(seatKey);
     }
 
-    private isSeatLocked(row: number, seat: number): boolean {
+    public isSeatLocked(row: number, seat: number): boolean {
         const seatKey = this.getSeatKey(row, seat);
         return this.lockedSeats.has(seatKey);
     }
+    checkSeatingRow(index: number) {
+        return String.fromCharCode(65 + index)
+    }
 
-    public bookSeat(row: number, seat: number, selected: boolean): boolean {
+    addBookingData(rowIndex, seatIndex, selected) {
+        this.seatingPlan[rowIndex][seatIndex]['isSelected'] = selected;
+        this.seatingPlan[rowIndex][seatIndex]['seatNumber'] = `${rowIndex + 1} ${this.checkSeatingRow(seatIndex)}`;
+        const seatKey = this.getSeatKey(rowIndex, seatIndex);
+        if (selected) {
+            this.bookedSeats.add(seatKey);
+            return true;
+        }
+    }
+
+    public bookSeat(seat: any, row: any, rowIndex, seatIndex, selected: boolean): boolean {
+debugger
+        // this.seatingPlan[rowIndex][seatIndex]['isSelected'] = selected;
+        this.seatingPlan[rowIndex][seatIndex]['seatNumber'] = `${rowIndex + 1} ${this.checkSeatingRow(seatIndex)}`;
+        const seatKey = this.getSeatKey(rowIndex, seatIndex);
+        if (selected) {
+            this.bookedSeats.add(seatKey);
+            return true;
+        } else {
+            this.bookedSeats.delete(seatKey);
+            return false;
+        } // Booking successful
         if (this.bookedSeats.size < this.MAX_BOOKING_LIMIT) {
-            const seatKey = this.getSeatKey(row, seat);
-            if (selected) {
-                this.bookedSeats.add(seatKey);
-                return true;
-            } else {
-                this.bookedSeats.add(seatKey);
-                return false;
-            } // Booking successful
+
         } else {
             return false; // Booking failed (reached booking limit)
         }
@@ -151,8 +178,17 @@ export class SeatingPlanService {
     }
 
     // Method to check if a seat is near a fire exit
-    private isNearFireExit(row: number, seat: number): boolean {
-        return this.FIRE_EXIT_ROWS.includes(row) && seat >= 9 && seat <= 15;
+    public isNearFireExit(row: number, seat: number): boolean {
+        return this.FIRE_EXIT_ROWS.includes(row) && [0, 5].includes(seat);
+    }
+
+    public areAdjacentSeatsAvailable(row: number, seat: number): boolean {
+        // Check if the adjacent seats (left and right) are available
+        const leftSeatAvailable = seat > 0 ? !this.seatingPlan[row][seat - 1].isBooked : false;
+        const rightSeatAvailable = seat < this.seatingPlan[row].length - 1 ? !this.seatingPlan[row][seat + 1].isBooked : false;
+        const topSeatAvailable = row > 1 && row < 20  ? !this.seatingPlan[row - 1][seat - 1].isBooked : true;
+        const bottomSeatAvailable = row > 2 && row < 20 ? !this.seatingPlan[row][seat + 1].isBooked : true;
+        return leftSeatAvailable && rightSeatAvailable && topSeatAvailable && bottomSeatAvailable
     }
 
 }

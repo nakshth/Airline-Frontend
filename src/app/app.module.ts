@@ -23,6 +23,7 @@ import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { BookingComponent } from './components/book-flight/booking/booking.component';
 import { CancellationComponent } from './components/book-flight/cancellation/cancellation.component';
 import { AdminDashboardComponent } from './components/home/admin-dashboard/admin-dashboard.component';
+import { ArraySortPipe } from './pipe/sort';
 
 export function HttpLoaderFactory(http: HttpClient){
   return new TranslateHttpLoader(http, './assets/i18n/', '.json');
@@ -38,6 +39,7 @@ export function HttpLoaderFactory(http: HttpClient){
     BookingComponent,
     CancellationComponent,
     AdminDashboardComponent,
+    ArraySortPipe,
   ],
   imports: [
     BrowserAnimationsModule,

@@ -1,0 +1,65 @@
+<section class="section find-flight">
+  <div [@findFlightTrigger] class="container">
+    <div *ngIf="success" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+      <div class="toast-header">
+        <img src="..." class="rounded mr-2" alt="...">
+        <strong class="mr-auto">Success</strong>
+        <small class="text-muted">Confirmed</small>
+        <button type="button" class="ml-2 mb-1 close" data-dismiss="toast" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="toast-body">
+        {{ type == 'book' ? 'Booking Successful' : 'Booking Cancelled'}}
+      </div>
+    </div>
+    <div class="section-box-find-flight">
+      <h4>Booking Confirmation</h4>
+      <div class="spinner-border m-5" role="status" *ngIf="loading" style="height: 150px; width: 150px;margin-left: 45% !important;">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="row" *ngIf="!loading" style="margin-top: 25px; display: flex; justify-content: space-around; margin-bottom: 25px;">
+        <div class="col-md-3 col-sm-3" *ngFor="let seat of bookingList"
+          style="cursor: pointer; margin-left: 25px; margin-top: 20px;">
+          <div class="card" style="width: 18rem; background: linear-gradient(to right, #240b36, #0a192f); color: #64ffda;">
+            <!-- <img class="card-img-top" src='../../../../assets/images/{{flight.id}}.jpg' src="../../../../assets/images/STR001.jpg" alt="Card image cap"> -->
+            <div class="card-body">
+              <span>
+                <b class="card-title">Seat : {{ seat.seatNumber }}</b>
+                <select class="main-btn cv-btn nav-link" aria-label="Select option" [(ngModel)]="seat.child" disabled
+                  (change)="changeValues(seat)"  style="margin-top: 20px; margin-bottom: 20px; padding: 10px !important;">
+                  <option value="false" selected>Adult</option>
+                  <option value="true">Child</option>
+                </select>
+
+              </span>
+              <h5 class="card-title">Price : 100</h5>
+              <h5 class="card-title" *ngIf="!seat.adult">Discounted Price : 75 <small
+                  style="color: rgba(153, 204, 162, 0.458);">( 25% Discount )</small></h5>
+              <p class="card-text"></p>
+              <!-- <h3>{{ flight.amount }} £</h3> -->
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="price-details" *ngIf="!loading" style="display: flex;
+      justify-content: space-evenly;">
+        <!-- Example of displaying calculated price -->
+        <div >
+          <p>Adults Price: 100 £</p>
+          <p>Child Price: 75 £ <small style="color: rgba(153, 204, 162, 0.458);">( 25% Discount )</small></p>
+
+        </div>
+        <div> Total Price <h3>{{ price }} £</h3></div>
+        <div style="display: flex;" *ngIf="!loading">
+          <button style="margin-left: 50px;    height: 50px;
+          margin-top: 50px;" class="main-btn cv-btn nav-link" (click)="cancelBooking()"> Cancel
+            Booking</button>
+        </div>
+      </div>
+
+     
+
+    </div>
+  </div>
+</section>

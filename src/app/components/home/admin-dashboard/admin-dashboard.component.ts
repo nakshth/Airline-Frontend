@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { SeatingPlanService } from '../../../services/seating-plan.service';
-import { SeatingAlgorithm } from 'src/app/services/seating-algorithm';
 
 @Component({
   selector: 'app-admin-dashboard',

@@ -4,19 +4,31 @@
             <img src='assets/images/logo.png' width='25' />
             <span style="margin-left: 10px;">Star</span>
         </a>
+        <span style="margin-left: 50px;" *ngIf="loggedInUser?.name">Welcome {{loggedInUser.name}}</span>
+        <small style="margin-left: 15px;" *ngIf="loggedInUser?.role">- {{loggedInUser.role}} </small>
+        <small style="margin-left: 15px;" *ngIf="!loggedInUser?.role"> Welcome Guest </small>
         <ul ngbNav #nav="ngbNav" class="menu-ul">
             <li ngbNavItem >
                 <a ngbNavLink routerLink="/find-flight"><span class='nav-number'></span> <span class="underline nav-text"> Find Flight </span></a>
                 <ng-template ngbNavContent>Find Flight</ng-template>
+            </li>
+            <li ngbNavItem *ngIf="bookings">
+                <a ngbNavLink routerLink="/booking"><span class='nav-number'></span> <span class="underline nav-text"> Bookings </span></a>
+                <ng-template ngbNavContent>Bookings</ng-template>
             </li>
             <!-- <li ngbNavItem>
                 <a class="main-btn cv-btn" class="main-btn cv-btn" ngbNavLink routerLink="/sign-up">
                   Sign Up
                 </a>
             </li> -->
-            <li ngbNavItem>
+            <li ngbNavItem  *ngIf="!loggedInUser">
                 <a class="main-btn cv-btn" ngbNavLink routerLink="/login">
                   Log In
+                </a>
+            </li>
+            <li ngbNavItem  *ngIf="loggedInUser" (click)="logout()">
+                <a class="main-btn cv-btn" ngbNavLink>
+                  Log Out
                 </a>
             </li>
         </ul>

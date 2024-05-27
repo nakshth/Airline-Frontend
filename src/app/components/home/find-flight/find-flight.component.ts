@@ -1,6 +1,7 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { UserService } from "../../../services/user.service";
 import {trigger, state, style, animate, transition, stagger, query } from "@angular/animations"
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-find-flight',
@@ -24,19 +25,61 @@ import {trigger, state, style, animate, transition, stagger, query } from "@angu
 })
 export class FindFlightComponent implements OnInit {
 
-  userData;
-  constructor(private user: UserService) {}
+  FlightData;
+  flightList: any = [];
+  loading =  false;
+  constructor(private user: UserService, public router: Router) {}
 
   ngOnInit() {
-    this.user.currentUserData.subscribe(userData => (this.userData = userData));
+    this.FlightData = { from: '', destination: '', date: '' }
   }
 
   changeData(event) {
     var msg = event.target.value;
     this.user.changeData(msg);
   }
+  chooseFlight() {
+    // routerLink="/seating-plan"
+    this.loading = true;
+    setTimeout(() => {
+      this.router.navigate(['/seating-plan']);
+      this.loading = false;
+    }, 2500);
+  }
   findFlight(data) {
-    this.user.changeData(data);
+    if (!data.from || !data.destination || !data.date) {
+      alert('please fill required fields');
+      return;
+    }
+    this.loading = true;
+    setTimeout(() => {
+      var today = new Date();
+      this.flightList = [{
+        id:'STR001',
+        from: data.from,
+        destination: data.destination,
+        depart: Date.now(),
+        arrival: today.setHours(today.getHours() + 4),
+        amount: 400
+      },
+      {
+        id:'STR002',
+        from: data.from,
+        destination: data.destination,
+        depart: Date.now(),
+        arrival: today.setHours(today.getHours() + 4.5),
+        amount: 375
+      },
+      {
+        id:'STR003',
+        from: data.from,
+        destination: data.destination,
+        depart: Date.now(),
+        arrival: today.setHours(today.getHours() + 3.5),
+        amount: 410
+      }];
+      this.loading = false;
+    }, 2500);
   }
 
 

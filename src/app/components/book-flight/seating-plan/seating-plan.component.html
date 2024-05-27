@@ -1,43 +1,141 @@
-<section class="seating-plan">
-    <div class="seat-layout">
-        <!-- <img src="../../../../assets/images/image.png"> -->
+<section class="seating-plan" style="margin-bottom: 50px;">
+    <div style="display: flex; flex-direction: row;">
+        <div class="plain-img">
+            <img src="../../../../assets/images/image.png" style="    width: 80%;
+            margin-top: 125px;">
 
-        <table>
-            <tr *ngFor="let row of seatingPlan; let rowIndex = index">
-                <td *ngFor="let seat of row; let seatIndex = index">
+        </div>
+        <div class="seat-layout">
 
-                    <!-- <span [ngClass]="{ 'available': seat && !isSeatBooked(rowIndex, seatIndex), 'isBooked': !seat || isSeatBooked(rowIndex, seatIndex) }">
-              {{ seat && !isSeatBooked(rowIndex, seatIndex) ? 'Available' : 'Booked' }}
-            </span> -->
+            <table>
+                <tr *ngFor="let row of seatingPlanService.seatingPlan | customsort; let rowIndex = index" style="display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: row; margin-left: 5px;">
+                    <p style="display: none;">{{row | json}}</p>
+                    <!-- <ng-template *ngIf="row"> -->
 
-                    <article class="feature1">
-                        <input class="form-control" type="checkbox"
-                            (change)="seatSelected(seat, row, rowIndex, seatIndex, $event)">
-                        <div
-                            [ngClass]="{ 'available': isSeatAvailable(rowIndex, seatIndex), 'booked': !isSeatAvailable(rowIndex, seatIndex) }">
-                            <!-- <span>
-                                Seat {{ rowIndex + 1 }} {{ checkSeatingRow(seatIndex) }}
-                            </span> -->
-                            <!-- <span
-                      [ngClass]="{ 'available': isSeatAvailable(rowIndex, seatIndex), 'booked': !isSeatAvailable(rowIndex, seatIndex) }">
-                      {{ isSeatAvailable(rowIndex, seatIndex) ? 'Available' : 'Unavailable' }}
-                  </span> -->
+                    <td *ngFor="let seat of row; let seatIndex = index"
+                        attr.id="Seat {{ rowIndex + 1 }} {{ checkSeatingRow(seatIndex) }}">
+
+                        <!-- <span [ngClass]="{ 'available': seat && !isSeatBooked(rowIndex, seatIndex), 'isBooked': !seat || isSeatBooked(rowIndex, seatIndex) }">
+                  {{ seat && !isSeatBooked(rowIndex, seatIndex) ? 'Available' : 'Booked' }}
+                </span> -->
+
+                        <article class="feature1">
+                            <p style="display: none;">{{seat}} </p>
+                            <input class="form-control" type="checkbox"
+                                [ngClass]="{'cursor-prevent': (MAX_BOOKING_LIMIT_REACHED && isSeatAvailable(rowIndex, seatIndex)) || seat.isBooked || seat.nearFireExit }"
+                                [disabled]="(MAX_BOOKING_LIMIT_REACHED && isSeatAvailable(rowIndex, seatIndex)) || seat.isBooked || seat.nearFireExit"
+                                (change)="seatSelected(seat, row, rowIndex, seatIndex, $event)">
+                            <div [ngClass]="{ 'available': isSeatAvailable(rowIndex, seatIndex), 'occupied': !isSeatAvailable(rowIndex, seatIndex), 
+                                    'locked': isSeatLocked(rowIndex, seatIndex), 'cursor-prevent booked': seat.isBooked, 'first-class': seat.type == 'first', 
+                                    'business-class':seat.type == 'business', 'economy-class':seat.type == 'economy', 'near-fire-exit': seat.nearFireExit }"
+                                style="font-size: 8px; color: white;">
+
+                                {{ rowIndex + 1 }} {{ checkSeatingRow(seatIndex) }} <!-- <span>
+                                    Seat {{ rowIndex + 1 }} {{ checkSeatingRow(seatIndex) }}
+                                </span> -->
+                                <!-- <span
+                          [ngClass]="{ 'available': isSeatAvailable(rowIndex, seatIndex), 'booked': !isSeatAvailable(rowIndex, seatIndex) }">
+                          {{ isSeatAvailable(rowIndex, seatIndex) ? 'Available' : 'Unavailable' }}
+                      </span> -->
+                            </div>
+
+                        </article>
+
+
+
+                    </td>
+                    <!-- </ng-template> -->
+                </tr>
+            </table>
+        </div>
+        <div style="margin-top: 100px; margin-left: 25px; display: flex; flex-direction: column;">
+            <!-- <div>
+                <span>
+                    <label class="form-label">Adults</label>
+                    <input type="number" max="6" [(ngModel)]="seatingPlanService.adults" (input)="calcMembs()">
+                </span>
+                <span>
+                    <label class="form-label">Childrens</label>
+                    <input type="number" max="6" [(ngModel)]="seatingPlanService.childs" (input)="calcMembs()">
+                </span>
+                <br>
+                <span>
+                    Total : {{total}} people
+                </span>
+                <span>
+                    <div *ngIf="total > 6" style="color: red;">Maximum booking limit is 6.</div>
+                </span>
+            </div> -->
+            <div class="selected-seats" style="height: 20% !important;" *ngIf="loggedInUser.role == 'staff'">
+
+                <div>Book seats for User<br>
+                    <select [(ngModel)]="selectedUser" style="height: 40px;" (change)="selectedUserChanged()">
+                        <!-- <ng-template > -->
+                        <option *ngFor="let user of UsersList" [value]="user.id">{{user.name}}</option>
+                        <!-- </ng-template> -->
+                    </select>
+                </div>
+
+            </div>
+            <div class="selected-seats">
+
+                <div>Selected Seats<br> </div>
+                <div style="
+                height: 100px;
+                width: 525px;
+                display: flex;
+                flex-wrap: wrap;">
+                    <div *ngFor="let seat of selectedSeats; let idx = index"
+                        style="width: 110px; margin-top: 15px;    margin-right: 15px;">
+                        <div class="main-btn cv-btn nav-link" style="display: flex;
+                        align-items: center;    border-radius: 20%;    height: 40px; cursor: pointer;">
+                            {{seat.seatNumber}}
                         </div>
+                    </div>
+                </div>
 
-                    </article>
+            </div>
+            <div class="calc-footer">
+                <!-- <div class="price-details">
+                    <p>Adults Price: 100 £</p>
+                    <p>Child Price: 75 £ ( 25% Discount )</p>
+                    <br>
+                    <p> Total Price {{price}} £</p>
+                </div> -->
+                <!-- <button (click)="bookSelectedSeats(0, 0)">Book Seat</button> -->
 
-
-
-                </td>
-            </tr>
-        </table>
+                <!-- Example of displaying error message -->
+                <!-- <div *ngIf="MAX_BOOKING_LIMIT_REACHED" style="color: red;">Maximum booking limit reached.</div> -->
+            </div>
+            <div style="display: flex;">
+                <button class="main-btn cv-btn nav-link" [ngClass]="{'cursor-prevent': selectedSeats.length == 0}"
+                    [disabled]="selectedSeats.length == 0" (click)="confirmBooking()">Goto Book Seats</button>
+                <button class="main-btn cv-btn nav-link" [ngClass]="{'cursor-prevent': selectedSeats.length == 0}"
+                    style="margin-left: 20px;" [disabled]="selectedSeats.length == 0" (click)="lockSeats()">Lock
+                    Seats</button>
+                <button class="main-btn cv-btn nav-link"
+                    [ngClass]="{'cursor-prevent': seatingPlanService.lockedSeats.size == 0}" style="margin-left: 20px;"
+                    [disabled]=" selectedSeats.length == 0" (click)="unlockSeat()">Unlock Seats</button>
+            </div>
+            <div class="disclaimers" style="display: flex;
+            justify-content: center;
+            flex-direction: column; margin-top: 25px;">
+                <small>* You can only book upto 6 seats at a time. Also you can't book scattered seats.</small>
+                <small>* Lock will be locked all selected seats for 10 minutes. After 10 minutes, seat will be unlocked
+                    automatically.</small>
+                <small>* UnLock will be unlocked all locked seats.</small>
+                <small><b class="available" style="font-size: x-large;"> * </b> Available seats.</small>
+                <small><b class="occupied" style="font-size: x-large;"> * </b>Selected seats.</small>
+                <small><b class="booked" style="font-size: x-large;"> * </b>Already booked seats.</small>
+                <small><b class="near-fire-exit" style="font-size: x-large;"> * </b>Seats near Fire Exit. Access
+                    Denied</small>
+                <small><b class="locked" style="font-size: x-large;">*</b>UnLock will be unlocked all locked
+                    seats.</small>
+            </div>
+        </div>
     </div>
-    <div>
-        <!-- Example of displaying calculated price -->
-        <p>Child Price: {{ seatingPlanService.calculatePrice(true) | currency }}</p>
-    </div>
-    <!-- <button (click)="bookSelectedSeats(0, 0)">Book Seat</button> -->
 
-    <!-- Example of displaying error message -->
-    <div *ngIf="!success">Maximum booking limit reached.</div>
 </section>

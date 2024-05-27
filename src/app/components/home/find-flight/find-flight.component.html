@@ -1,22 +1,27 @@
 <section class="section find-flight">
   <div [@findFlightTrigger] class="container">
-    <div class="section-box-find-flight">
+    <div class="section-box-find-flight" >
       <div class="row">
         <div class="col-md-12 col-sm-12">
           <div class="card auth">
             <div class="card-body auth-card">
-              <form (submit)="findFlight(userData)">
+              <form (submit)="findFlight(FlightData)">
                 <div class="form-group-1">
                   <!-- <label for="email">Email : </label> -->
-                  <input type="text" name="email" class="form-control" placeholder="From" [(ngModel)]="userData.email">
+                  <input type="text" name="from" class="form-control" placeholder="From" [(ngModel)]="FlightData.from">
                 </div>
                 <div class="form-group-1">
                   <!-- <label for="password">Password : </label> -->
-                  <input type="password" name="password" class="form-control" placeholder="Destination"
-                    [(ngModel)]="userData.password">
+                  <input type="destination" name="destination" class="form-control" placeholder="Destination"
+                    [(ngModel)]="FlightData.destination">
                 </div>
-                <div class="text-center">
-                  <input type="submit" class="btn btn-my" value="Find Flights">
+                <div class="form-group-1">
+                  <!-- <label for="password">Password : </label> -->
+                  <input name="date" class="form-control" placeholder="Date" type="text" onfocus="(this.type='date')"
+                    onblur="(this.type='text')" [(ngModel)]="FlightData.date">
+                </div>
+                <div class="text-center submit-btn">
+                  <input type="submit" class="main-btn cv-btn nav-link" value="Find Flights">
                 </div>
               </form>
 
@@ -26,7 +31,7 @@
         </div>
       </div>
 
-      <div class="row">
+      <!-- <div class="row">
         <div class="col-md-12 col-sm-12">
           <ul ngbNav #nav="ngbNav" class="menu-ul">
             <li ngbNavItem>
@@ -35,6 +40,27 @@
               <ng-template ngbNavContent>Seating Plan</ng-template>
             </li>
           </ul>
+        </div>
+      </div> -->
+      
+      <!-- <p-progressSpinner *ngIf="loading"></p-progressSpinner> -->
+      <div class="spinner-border m-5" role="status" *ngIf="loading" style="height: 150px; width: 150px;margin-left: 45% !important;">
+        <span class="sr-only">Loading...</span>
+      </div>
+      <div class="row" style="margin-top: 50px; display: flex; justify-content: space-around;" *ngIf="!loading">
+        <div class="col-md-3 col-sm-3" *ngFor="let flight of flightList" (click)="chooseFlight()" style="cursor: pointer;">
+          <div class="card" style="width: 18rem; background: linear-gradient(to right, #240b36, #0a192f); color: #64ffda;">
+            <img class="card-img-top" src='../../../../assets/images/{{flight.id}}.jpg' src="../../../../assets/images/STR001.jpg" alt="Card image cap">
+            <div class="card-body">
+              <b class="card-title">Flight ID : {{ flight.id }}</b>
+              <h5 class="card-title">Date : {{ FlightData.date | date:'mediumDate'}}</h5>
+              <h5 class="card-title">From : {{ FlightData.from }} : {{ flight.depart | date:'shortTime'}}</h5>
+              <h5 class="card-title">To : {{ FlightData.destination }} : {{ flight.arrival | date:'shortTime' }}</h5>
+              <p class="card-text"></p>
+              <h3>{{ flight.amount }} £</h3>
+              <!-- <a href="#" class="btn btn-primary">Select Flight</a> -->
+            </div>
+          </div>
         </div>
       </div>
 

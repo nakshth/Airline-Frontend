@@ -1,13 +1,16 @@
 // seating-algorithm.ts
 
+import { Injectable } from "@angular/core";
+
 interface Seat {
     row: number;
     seat: number;
     booked: boolean;
 }
 
+  
 export class SeatingAlgorithm {
-    constructor(private seatingPlan: Seat[][]) { }
+    constructor(private seatingPlan: any) { }
 
     public assignSeats(): void {
         for (let row = 0; row < this.seatingPlan.length; row++) {
@@ -29,12 +32,13 @@ export class SeatingAlgorithm {
         }
     }
 
-    private areAdjacentSeatsAvailable(row: number, seat: number): boolean {
+    public areAdjacentSeatsAvailable(row: number, seat: number): boolean {
         // Check if the adjacent seats (left and right) are available
-        const leftSeatAvailable = seat > 0 ? !this.seatingPlan[row][seat - 1].booked : false;
-        const rightSeatAvailable = seat < this.seatingPlan[row].length - 1 ? !this.seatingPlan[row][seat + 1].booked : false;
-
-        return leftSeatAvailable && rightSeatAvailable;
+        const leftSeatAvailable = seat > 0 ? !this.seatingPlan[row][seat - 1].isBooked : false;
+        const rightSeatAvailable = seat < this.seatingPlan[row].length - 1 ? !this.seatingPlan[row][seat + 1].isBooked : false;
+        const topSeatAvailable = row > 1 && row < 20  ? !this.seatingPlan[row - 1][seat - 1].isBooked : true;
+        const bottomSeatAvailable = row > 2 && row < 20 ? !this.seatingPlan[row][seat + 1].isBooked : true;
+        return leftSeatAvailable && rightSeatAvailable && topSeatAvailable && bottomSeatAvailable
     }
 
     private bookAdjacentSeats(row: number, seat: number): void {
