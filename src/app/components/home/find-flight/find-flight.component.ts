@@ -7,21 +7,7 @@ import { Router } from '@angular/router';
   selector: 'app-find-flight',
   templateUrl: './find-flight.component.html',
   styleUrls: ['./find-flight.component.scss'],
-  animations: [
-    trigger('findFlightTrigger', [
-      transition(":enter", [
-        query("*", [
-          style({ opacity: 0, transform: "translateX(-50px)" }),
-          stagger(50, [
-            animate(
-              "250ms cubic-bezier(0.35, 0, 0.25, 1)",
-              style({ opacity: 1, transform: "none" })
-            )
-          ])
-        ])
-      ])
-    ])
-  ]
+ 
 })
 export class FindFlightComponent implements OnInit {
 
@@ -34,25 +20,25 @@ export class FindFlightComponent implements OnInit {
     this.FlightData = { from: '', destination: '', date: '' }
   }
 
-  changeData(event) {
-    var msg = event.target.value;
-    this.user.changeData(msg);
-  }
+  // changeData(event) {
+  //   var msg = event.target.value;
+  //   this.user.changeData(msg);
+  // }
   chooseFlight() {
     // routerLink="/seating-plan"
     this.loading = true;
-    setTimeout(() => {
+    // setTimeout(() => {
       this.router.navigate(['/seating-plan']);
       this.loading = false;
-    }, 2500);
+    // }, 2500);
   }
   findFlight(data) {
-    if (!data.from || !data.destination || !data.date) {
-      alert('please fill required fields');
-      return;
-    }
+    // if (!data.from || !data.destination || !data.date) {
+    //   alert('please fill required fields');
+    //   return;
+    // }
     this.loading = true;
-    setTimeout(() => {
+    // setTimeout(() => {
       var today = new Date();
       this.flightList = [{
         id:'STR001',
@@ -79,7 +65,7 @@ export class FindFlightComponent implements OnInit {
         amount: 410
       }];
       this.loading = false;
-    }, 2500);
+    // }, 2500);
   }
 
 
